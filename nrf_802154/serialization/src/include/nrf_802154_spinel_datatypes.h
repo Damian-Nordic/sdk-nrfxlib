@@ -1164,6 +1164,7 @@ typedef enum
     SPINEL_DATATYPE_INT8_S                               /* Power */       \
     SPINEL_DATATYPE_UINT8_S                              /* LQI */         \
     SPINEL_DATATYPE_UINT64_S                             /* Timestamp */   \
+    SPINEL_DATATYPE_UINT8_S                              /* PHY */         \
     SPINEL_DATATYPE_NRF_802154_HDATA_S                   /* Ack frame with its handle */
 
 /**
@@ -1178,6 +1179,7 @@ typedef enum
     (metadata).data.transmitted.power,                                 \
     (metadata).data.transmitted.lqi,                                   \
     (metadata).data.transmitted.time,                                  \
+    (metadata).data.transmitted.phy,                                   \
     NRF_802154_HDATA_ENCODE(ack_handle,                                \
                             (metadata).data.transmitted.p_ack,         \
                             ((metadata).data.transmitted.p_ack) ?      \
@@ -1196,6 +1198,7 @@ typedef enum
     &(metadata).data.transmitted.power,                                            \
     &(metadata).data.transmitted.lqi,                                              \
     &(metadata).data.transmitted.time,                                             \
+    &(metadata).data.transmitted.phy,                                              \
     NRF_802154_HDATA_DECODE(ack_handle, (metadata).data.transmitted.p_ack, ack_length)
 
 /**

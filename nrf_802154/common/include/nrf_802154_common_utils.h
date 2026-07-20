@@ -37,6 +37,7 @@
 
 #include <stdint.h>
 #include "nrf_802154_config.h"
+#include "nrf_802154_types.h"
 
 /**
  * @defgroup nrf_802154_data Functions to calculate data given by the driver
@@ -93,6 +94,52 @@ uint64_t nrf_802154_first_symbol_timestamp_get(uint64_t end_timestamp, uint8_t p
  */
 uint64_t nrf_802154_mhr_timestamp_get(uint64_t end_timestamp, uint8_t psdu_length);
 
+#if NRF_802154_GFSK_2MBPS_PHY_ENABLED
+
+/**
+ * @brief  Converts the timestamp of the frame's end to the timestamp of the start of its PHR.
+ *
+ * This function calculates the time when the first symbol of the PHR is at the local antenna. Note
+ * that this time is equivalent to: the end of the frame's SFD and RMARKER as defined in'
+ * IEEE 802.15.4-2020, Section 6.9.1.
+ *
+ * @param[in]  end_timestamp  Timestamp of the end of the last symbol in the frame,
+ *                            in microseconds.
+ * @param[in]  psdu_length    Number of bytes in the frame PSDU.
+ * @param[in]  phy            The PHY to get the timestamp for.
+ *
+ * @return  Timestamp of the start of the PHR of a given frame, in microseconds.
+ */
+uint64_t nrf_802154_timestamp_end_to_phr_convert(uint64_t end_timestamp, uint8_t psdu_length, nrf_802154_phy_t phy);
+
+/**
+ * @brief  Converts the timestamp of the frame's PHR to the timestamp of the start of its SHR.
+ *
+ * This function converts the time when the first symbol of the frame's PHR is at the local antenna
+ * to the timestamp of the start of the frame's SHR.
+ *
+ * @param[in]  phr_timestamp  Timestamp of the frame's PHR.
+ * @param[in]  phy            The PHY to get the timestamp for.
+ *
+ * @return  Timestamp of the start of the SHR of a given frame, in microseconds.
+ */
+uint64_t nrf_802154_timestamp_phr_to_shr_convert(uint64_t phr_timestamp, nrf_802154_phy_t phy);
+
+/**
+ * @brief  Converts the timestamp of the frame's PHR to the timestamp of the start of its MHR.
+ *
+ * This function converts the time when the first symbol of the frame's PHR is at the local antenna
+ * to the timestamp of the start of the frame's MHR.
+ *
+ * @param[in]  phr_timestamp  Timestamp of the frame's PHR.
+ * @param[in]  phy            The PHY to get the timestamp for.
+ *
+ * @return  Timestamp of the start of the MHR of a given frame, in microseconds.
+ */
+uint64_t nrf_802154_timestamp_phr_to_mhr_convert(uint64_t phr_timestamp, nrf_802154_phy_t phy);
+
+#else /* NRF_802154_GFSK_2MBPS_PHY_ENABLED */
+
 /**
  * @brief  Converts the timestamp of the frame's end to the timestamp of the start of its PHR.
  *
@@ -131,6 +178,8 @@ uint64_t nrf_802154_timestamp_phr_to_shr_convert(uint64_t phr_timestamp);
  * @return  Timestamp of the start of the MHR of a given frame, in microseconds.
  */
 uint64_t nrf_802154_timestamp_phr_to_mhr_convert(uint64_t phr_timestamp);
+
+#endif/* NRF_802154_GFSK_2MBPS_PHY_ENABLED */
 
 /**
  * @}
